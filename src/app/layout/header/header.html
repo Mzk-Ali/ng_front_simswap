@@ -1,1 +1,76 @@
-<p>header works!</p>
+<header class="app-header">
+    <a class="logo-wrapper" href="/">
+        <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
+            width="50" height="50" viewBox="0 0 540.000000 540.000000"
+            preserveAspectRatio="xMidYMid meet"
+            class="logo-svg"
+        >
+            <defs>
+                <linearGradient id="spinGradient" x1="0" y1="0" x2="100" y2="0">
+                    <stop offset="0%" stop-color="#ffe1bc"/>
+                    <stop offset="50%" stop-color="#ffcfd1"/>
+                    <stop offset="100%" stop-color="#f3c6f1"/>
+                    <animateTransform
+                        attributeName="gradientTransform"
+                        type="rotate"
+                        from="0 50 50"
+                        to="360 50 50"
+                        dur="6s"
+                        repeatCount="indefinite" />
+                </linearGradient>
+            </defs>
+            <g transform="translate(0.000000,540.000000) scale(0.100000,-0.100000)"
+            fill="url(#spinGradient)" stroke="none">
+                <path d="M2272 5335 c-540 -81 -905 -157 -1072 -223 -209 -83 -436 -205 -816
+                -436 -128 -78 -253 -153 -278 -169 -86 -50 -93 -110 -30 -253 20 -43 59 -144
+                88 -224 165 -450 337 -804 538 -1104 115 -173 197 -275 333 -415 193 -198 342
+                -310 549 -413 111 -54 281 -116 291 -106 3 2 12 42 20 89 36 192 106 441 193
+                687 22 61 35 112 30 112 -32 0 -142 -37 -198 -66 -126 -67 -299 -216 -438
+                -379 l-50 -60 5 45 c13 103 64 275 111 373 85 178 184 285 326 353 93 45 161
+                57 279 52 l99 -5 67 136 c36 75 79 168 94 206 77 192 202 301 376 327 100 15
+                171 0 249 -51 33 -23 63 -41 64 -41 6 0 -11 187 -27 310 -34 249 -105 559
+                -191 831 -25 79 -59 189 -75 244 -38 133 -44 147 -85 186 -30 29 -41 33 -97
+                36 -35 1 -189 -17 -355 -42z m226 -1070 c78 -24 208 -100 245 -142 18 -20 17
+                -22 -45 -70 -208 -164 -405 -190 -622 -81 -66 33 -166 103 -166 117 0 15 148
+                111 225 147 134 62 234 70 363 29z m-968 -375 c0 -39 -60 -206 -95 -265 -102
+                -170 -239 -243 -472 -253 -101 -4 -123 -2 -123 9 0 38 46 172 83 244 99 192
+                261 283 505 284 95 1 102 0 102 -19z"/>
+                <path d="M2769 3523 c-19 -16 -46 -58 -66 -103 -19 -41 -54 -113 -77 -160 -61
+                -118 -147 -316 -221 -505 -336 -858 -377 -1595 -117 -2120 86 -175 242 -360
+                364 -433 91 -54 217 -75 408 -69 171 6 253 21 410 74 429 145 855 500 1230
+                1028 147 208 319 494 430 715 23 47 59 108 80 135 101 136 111 216 34 286 -36
+                32 -402 301 -581 427 -209 147 -405 266 -578 352 -242 119 -419 181 -875 304
+                -113 31 -236 65 -275 76 -95 27 -127 26 -166 -7z m248 -1097 c118 -32 222
+                -109 308 -230 47 -67 89 -145 82 -153 -17 -16 -135 -36 -217 -36 -207 0 -368
+                101 -500 316 -27 45 -50 84 -50 88 0 26 292 38 377 15z m1046 -511 c157 -41
+                274 -143 359 -313 23 -45 39 -84 36 -87 -12 -12 -119 -25 -208 -25 -235 0
+                -426 125 -541 353 -22 42 -26 59 -17 62 69 26 289 31 371 10z m-1470 -314
+                c109 -187 286 -385 411 -460 184 -110 419 -135 806 -86 l45 6 -50 -47 c-104
+                -98 -309 -218 -445 -262 -144 -47 -246 -53 -366 -22 -267 68 -419 318 -454
+                744 -9 100 -6 206 5 206 1 0 23 -36 48 -79z"/>
+            </g>
+        </svg>
+        <span class="logo-text">SimSwap</span>
+    </a>
+    <nav class="nav-desktop">
+        <ul class="navbar-end">
+            <li *ngFor="let item of desktopItems" class="desktop-menu-item" (onclick)="item.command?.()">
+                {{ item.label }}
+            </li>
+            <li>
+                <a class="navbar-item" href="/login">
+                    <button pButton type="button" label="Login"></button>
+                </a>
+            </li>
+            <li>
+                <a class="navbar-item" href="/register">
+                    <button pButton type="button" label="Register"></button>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <div class="nav-mobile">
+        <p-menu #menu [model]="mobileItems" [popup]="true" />
+        <p-button (onClick)="menu.toggle($event)" icon="pi pi-bars"/>
+    </div>
+</header>

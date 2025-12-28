@@ -7,6 +7,7 @@ import { Footer } from "./footer/footer";
   selector: 'app-layout',
   imports: [Header, RouterOutlet, Footer],
   templateUrl: './layout.html',
+  styleUrls: ['./layout.css']
 })
 export class Layout {
 

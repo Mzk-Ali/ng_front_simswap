@@ -1,7 +1,10 @@
-<app-header />
-
-<main id="wrapper">
-    <router-outlet />
-</main>
-
-<app-footer />
+<div id="Wrapper">
+    <app-header />
+    <div class="overlay-wrapper" animate.enter>
+        <main>
+            <router-outlet />
+        </main>
+        
+        <app-footer />
+    </div>
+</div>

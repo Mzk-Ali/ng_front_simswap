@@ -9,9 +9,11 @@ import { PrimeNG } from 'primeng/config';
   styleUrls: ['./app.css']
 })
 export class App implements OnInit {
-  constructor(private readonly primeng: PrimeNG) {}
+  protected readonly title = signal('ng_front_simswap');
+  constructor(
+    private readonly primeng: PrimeNG,
+  ) {}
   ngOnInit(): void {
     this.primeng.ripple.set(true);
   }
-  protected readonly title = signal('ng_front_simswap');
 }
