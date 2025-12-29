@@ -26,17 +26,25 @@
     overflow-y: auto;
     scrollbar-width: thin;
     scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
-    padding: 20px;
+    padding: 2px;
     padding-top: 130px;
     animation: expandOverlay 0.5s ease-out forwards;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     align-items: center;
+    gap: 30px;
+}
+
+@media (min-width: 768px){
+    .overlay-wrapper {
+        padding:20px;
+        padding-top: 130px;
+    }
 }
 
 main {
-    width: 90vw;
-    min-height: calc(100% - 80px);
+    width: 100%;
     max-width: 1440px;
 }
 
