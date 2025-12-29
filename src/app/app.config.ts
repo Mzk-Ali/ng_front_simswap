@@ -4,11 +4,16 @@ import { providePrimeNG } from 'primeng/config';
 
 import { routes } from './app.routes';
 import MyPreset from './mypreset';
+import { MessageService } from 'primeng/api';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { authInterceptor } from './core/interceptors/auth.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
+    provideHttpClient(withInterceptors([authInterceptor])),
+    MessageService,
     providePrimeNG({
             theme: {
                 preset: MyPreset,
