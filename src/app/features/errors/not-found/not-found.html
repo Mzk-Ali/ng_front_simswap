@@ -1,0 +1,16 @@
+<div class="max-w-xl w-full mx-auto p-1.5 rounded-[36px] lg:rounded-[56px]" style="background: linear-gradient(180deg, rgba(139, 92, 246, 0.4) 10%, rgba(139, 92, 246, 0) 30%)">
+    <div class="w-full flex flex-col items-center gap-10 bg-[#f8f9fa] px-2 py-10 rounded-[33px] sm:p-10 lg:rounded-[53px]">
+        <div class="gap-4 flex flex-col items-center">
+            <div class="flex justify-center items-center border-2 border-violet-500 rounded-full" style="width: 3.2rem; height: 3.2rem">
+                <i class="text-violet-500 pi pi-fw pi-lock text-2xl!"></i>
+            </div>
+            <h1 class="font-bold text-3xl lg:text-5xl mb-2">Page introuvable</h1>
+            <span class="text-muted-color mb-8 text-center">Désolé, la page que vous recherchez n'existe pas ou a été déplacée.</span>
+            <img src="/images/error/404-error.svg" alt="Page Not Found" width="80%" />
+            <div class="col-span-12 text-center space-x-2 lg:space-x-10">
+                <p-button label="Page précédente" (onClick)="goBack()" severity="help" />
+                <p-button label="Retour à l'accueil" routerLink="/" severity="secondary" />
+            </div>
+        </div>
+    </div>
+</div>
