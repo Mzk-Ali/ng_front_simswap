@@ -127,11 +127,11 @@ export class Register {
         const { email, password } = this.registerForm.value;
 
         this.authService.register(email, password).subscribe({
-            next: () => {
+            next: (response) => {
                 this.messageService.add({
                     severity: 'success',
                     summary: 'Inscription réussie',
-                    detail: "Veuillez trouver un lien d'activation dans votre boite mail",
+                    detail: response.message,
                     life: 3000,
                 });
 

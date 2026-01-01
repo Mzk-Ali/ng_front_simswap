@@ -15,6 +15,11 @@ export interface RegisterRequest {
     password: string;
 }
 
+export interface RegisterResponse {
+    email: string;
+    message: string;
+}
+
 export interface RefreshTokenRequest extends DeviceInfo {
     refreshToken: string;
 }
@@ -23,11 +28,16 @@ export interface LogoutRequest extends DeviceInfo {
     refreshToken: string;
 }
 
-export interface AuthResponse {
+export interface TokensResponse  {
     accessToken: string;
     refreshToken: string;
     expiresIn: number;
     tokenType?: string;
+}
+
+export interface EmailVerificationResponse {
+    email: string;
+    verified: boolean;
 }
 
 export interface LogoutResponse {

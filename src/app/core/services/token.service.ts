@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { AuthResponse, AuthState } from "../models/auth.model";
+import { TokensResponse, AuthState } from "../models/auth.model";
 
 @Injectable({
     providedIn: 'root',
@@ -18,9 +18,9 @@ export class TokenService {
         return expiresAt ? Number.parseInt(expiresAt, 10) : null;
     }
 
-    setTokens(authResponse: AuthResponse): void {
-        localStorage.setItem('access_token', authResponse.accessToken);
-        localStorage.setItem('refresh_token', authResponse.refreshToken);
+    setTokens(tokensResponse: TokensResponse): void {
+        localStorage.setItem('access_token', tokensResponse.accessToken);
+        localStorage.setItem('refresh_token', tokensResponse.refreshToken);
     }
 
     clearTokens(): void {

@@ -8,11 +8,11 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { PasswordModule } from 'primeng/password';
 import { MessageService } from 'primeng/api';
 import { AuthService } from '../../../core/services/auth.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, FormsModule, CheckboxModule, InputTextModule, PasswordModule, ButtonModule, MessageModule, ToastModule],
+  imports: [ReactiveFormsModule, FormsModule, CheckboxModule, InputTextModule, PasswordModule, ButtonModule, MessageModule, ToastModule, RouterLink],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
@@ -27,7 +27,7 @@ export class Login {
     formSubmitted = false;
 
     isLoading = signal(false);
-
+    
     errorMessage = signal<string | null>(null);
 
     constructor() {
@@ -43,7 +43,6 @@ export class Login {
             this.loginForm.markAllAsTouched();
             return;
         }
-
 
         this.isLoading.set(true);
         this.errorMessage.set(null);
