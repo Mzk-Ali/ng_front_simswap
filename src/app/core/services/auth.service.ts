@@ -2,10 +2,11 @@ import { HttpClient } from "@angular/common/http";
 import { inject, Injectable, signal } from "@angular/core";
 import { DeviceInfoService } from "./device-info.service";
 import { Router } from "@angular/router";
-import { AuthResponse, AuthState, LoginRequest, LogoutRequest, RefreshTokenRequest, RegisterRequest } from "../models/auth.model";
+import { AuthState, LoginRequest, LogoutRequest, RefreshTokenRequest, RegisterRequest, RegisterResponse, TokensResponse } from "../models/auth.model";
 import { BehaviorSubject, catchError, finalize, map, Observable, of, tap, throwError } from "rxjs";
 import { User } from "../models/user.model";
 import { TokenService } from "./token.service";
+import { ApiResponse } from "../models/response.model";
 
 @Injectable({
     providedIn: 'root',
@@ -16,7 +17,7 @@ export class AuthService {
     private readonly tokenService           = inject(TokenService);
     private readonly deviceInfoService      = inject(DeviceInfoService);
 
-    private readonly API_URL                = 'http://localhost:8888/auth-service';
+    private readonly API_URL                = 'http://localhost:8888/api/v1/auth';
 
     private readonly currentUserSubject     = new BehaviorSubject<User | null>(null);
     public readonly currentUser$            = this.currentUserSubject.asObservable();
@@ -25,7 +26,7 @@ export class AuthService {
     private readonly refreshTokenSubject    = new BehaviorSubject<string | null>(null);
     private isRefreshing                    = false;
 
-    login(email: string, password: string): Observable<AuthResponse> {
+    login(email: string, password: string): Observable<TokensResponse> {
         const deviceInfo = this.deviceInfoService.getDeviceInfo();
 
         const loginRequest: LoginRequest = {
@@ -34,25 +35,36 @@ export class AuthService {
             ...deviceInfo,
         };
 
-        return this.http.post<AuthResponse>(`${this.API_URL}/authenticate`, loginRequest).pipe(
-            tap((response) => this.handleAuthSuccess(response)),
+        return this.http.post<ApiResponse<TokensResponse>>(`${this.API_URL}/authenticate`, loginRequest).pipe(
+            map(response => {
+                if(!response.success || !response.data) {
+                    throw new Error(response.message);
+                }
+                return response.data;
+            }),
+            tap((tokens) => this.handleAuthSuccess(tokens)),
             catchError((error) => this.handleAuthError(error))
         );
     }
 
-    register(email: string, password: string): Observable<AuthResponse> {
+    register(email: string, password: string): Observable<RegisterResponse> {
         const registerRequest: RegisterRequest = {
             email,
             password,
         };
 
-        return this.http.post<AuthResponse>(`${this.API_URL}/register`, registerRequest).pipe(
-            tap((response) => this.handleAuthSuccess(response)),
+        return this.http.post<ApiResponse<RegisterResponse>>(`${this.API_URL}/register`, registerRequest).pipe(
+            map(response => {
+                if(!response.success || !response.data) {
+                    throw new Error(response.message);
+                }
+                return response.data;
+            }),
             catchError((error) => this.handleAuthError(error))
         );
     }
 
-    refreshToken(): Observable<AuthResponse> {
+    refreshToken(): Observable<TokensResponse> {
         const refreshToken = this.tokenService.getRefreshToken();
 
         if (!refreshToken) {
@@ -65,7 +77,7 @@ export class AuthService {
                     if (!token) {
                         throw new Error('Échec du rafraîchissement du token');
                     }
-                    return { accessToken: token } as AuthResponse;
+                    return { accessToken: token } as TokensResponse;
                 })
             );
         }
@@ -80,10 +92,16 @@ export class AuthService {
             ...deviceInfo,
         };
 
-        return this.http.post<AuthResponse>(`${this.API_URL}/refresh-token`, refreshRequest).pipe(
-            tap((response) => {
-                this.tokenService.setTokens(response);
-                this.refreshTokenSubject.next(response.accessToken);
+        return this.http.post<ApiResponse<TokensResponse>>(`${this.API_URL}/refresh-token`, refreshRequest).pipe(
+            map(response => {
+                if(!response.success || !response.data) {
+                    throw new Error(response.message);
+                }
+                return response.data;
+            }),
+            tap((tokens) => {
+                this.tokenService.setTokens(tokens);
+                this.refreshTokenSubject.next(tokens.accessToken);
             }),
             catchError((error) => {
                 this.logout();
@@ -112,19 +130,14 @@ export class AuthService {
             ...deviceInfo,
         };
 
-        if (refreshToken) {
-            this.http
-                .post(`${this.API_URL}/logout`, { logoutRequest })
-                .pipe(
-                    catchError(() => of(null))
-                )
-                .subscribe();
-        }
+        this.http.post<ApiResponse<void>>(`${this.API_URL}/logout`, { logoutRequest }).pipe(
+                catchError(() => of(null))
+            )
+            .subscribe();
 
         this.tokenService.clearTokens();
         this.currentUserSubject.next(null);
         this.isAuthenticated.set(false);
-
         this.router.navigate(['/login']);
     }
 
@@ -149,7 +162,7 @@ export class AuthService {
         return this.tokenService.getAuthState();
     }
 
-    private handleAuthSuccess(response: AuthResponse): void {
+    private handleAuthSuccess(response: TokensResponse): void {
         this.tokenService.setTokens(response);
         this.isAuthenticated.set(true);
 
