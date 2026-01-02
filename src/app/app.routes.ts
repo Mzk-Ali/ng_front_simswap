@@ -14,6 +14,12 @@ export const routes: Routes = [
         loadComponent: () => 
             import('./layout/layout').then(c => c.Layout),
         children: [
+            {
+                path: '',
+                loadComponent: () =>
+                import('./features/home/home-page/home-page')
+                    .then(m => m.HomePage),
+            },
             ... authRoutes,
             ... errorRoutes,
         ]

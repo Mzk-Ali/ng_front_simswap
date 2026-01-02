@@ -1,0 +1,20 @@
+<section pAnimateOnScroll 
+    id="timeline"
+    class="bg-[#f8f9fa] rounded-xl p-5 shadow-lg"
+    enterClass="animate-enter fade-in-10 zoom-in-50 animate-duration-1000"
+>
+    <h2 class="text-xl text-center font-bold">Comment utiliser Simswap pour echanger des visages par IA ?</h2>
+    <p class="text-sm text-center italic text-slate-400 my-2">Avec Simswap, devenez la personne que vous voulez être.</p>
+    <div class="my-10 flex justify-center items-center flex-wrap">
+        <img src="/images/illustrations/forgot-password.svg"
+            alt="Illustration de Simswap"
+            class="w-10/12 max-w-md"
+        />
+        <p-timeline [value]="events">
+            <ng-template #content let-event>
+                <span class="font-semibold">{{ event.title }}</span>
+                <p class="italic text-slate-400">{{ event.description }}</p>
+            </ng-template>
+        </p-timeline>
+    </div>
+</section>

@@ -1,0 +1,34 @@
+<section pAnimateOnScroll 
+    id="faq"
+    class="bg-[#f8f9fa] rounded-xl p-5 shadow-lg"
+    enterClass="animate-enter fade-in-10 zoom-in-50 animate-duration-1000"
+>
+    <h2 class="text-xl text-center font-bold">FAQ sur SimSwap</h2>
+    <p class="text-sm text-center italic text-slate-400 my-2">Vous avez des questions sur Simswap? Voici pour vous les réponses des questions fréquentes.</p>
+    <div class="my-10">
+        <h2 class="font-semibold ml-5 my-2">Partie 1</h2>
+        <p-accordion [value]="0">
+            @for (tab of tabs; track tab.title) {
+                <p-accordion-panel [value]="tab.value">
+                    <p-accordion-header>{{ tab.title }}</p-accordion-header>
+                    <p-accordion-content>
+                        <p class="m-0">{{ tab.content }}</p>
+                    </p-accordion-content>
+                </p-accordion-panel>
+            }
+        </p-accordion>
+    </div>
+    <div>
+        <h2 class="font-semibold ml-5 my-2">Partie 2</h2>
+        <p-accordion [value]="0">
+            @for (tab of tabs2; track tab.title) {
+                <p-accordion-panel [value]="tab.value">
+                    <p-accordion-header>{{ tab.title }}</p-accordion-header>
+                    <p-accordion-content>
+                        <p class="m-0">{{ tab.content }}</p>
+                    </p-accordion-content>
+                </p-accordion-panel>
+            }
+        </p-accordion>
+    </div>
+</section>

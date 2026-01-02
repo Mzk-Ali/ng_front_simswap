@@ -54,8 +54,8 @@
     </a>
     <nav class="nav-desktop">
         <ul class="navbar-end">
-            <li *ngFor="let item of desktopItems" class="desktop-menu-item" (onclick)="item.command?.()">
-                {{ item.label }}
+            <li *ngFor="let item of desktopItems" class="desktop-menu-item" >
+                <a [href]="item.id ? '#' + item.id : ''">{{ item.label }}</a>
             </li>
             <li>
                 <a class="navbar-item" href="/login">

@@ -43,7 +43,8 @@ export class Header implements OnInit {
       ];
     } else {
       this.desktopItems = [
-        { label: 'Prix', root: true },
+        { label: 'Prix', id: 'pricing' },
+        { label: 'FAQ', id: 'faq' },
       ];
     }
   }

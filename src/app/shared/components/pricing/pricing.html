@@ -1,0 +1,60 @@
+<section pAnimateOnScroll 
+    id="pricing"
+    class="bg-[#f8f9fa] rounded-xl p-5 shadow-lg"
+    enterClass="animate-enter fade-in-10 zoom-in-50 animate-duration-1000"
+>
+    <h2 class="text-xl text-center font-bold mb-8">Prix de nos abonnements</h2>
+    <div class="grid grid-cols-12 gap-4 justify-between">
+        <div class="col-span-12 lg:col-span-4 p-0 md:p-4"
+            pAnimateOnScroll
+            enterClass="animate-enter fade-in-10 slide-in-from-t-20 animate-duration-1000"
+            leaveClass="animate-leave fade-out-0"
+        >
+            <div class="p-4 flex flex-col border-slate-200 pricing-card cursor-pointer border-2 hover:border-primary duration-300 transition-all" style="border-radius: 10px">
+                <div class="text-center my-8 text-3xl">Free</div>
+                <img src="https://primefaces.org/cdn/templates/sakai/landing/free.svg" class="w-10/12 mx-auto" alt="free" />
+                <div class="my-8 flex flex-col items-center gap-4">
+                    <div class="flex items-center">
+                        <span class="text-5xl font-bold mr-2">€0</span>
+                        <span class="">par mois</span>
+                    </div>
+                    <button pButton pRipple label="Try Free" routerLink="/login" class="p-button-rounded border-0 ml-4 font-light leading-tight bg-blue-500 text-white"></button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-span-12 lg:col-span-4 p-0 md:p-4 mt-6 md:mt-0"
+            pAnimateOnScroll
+            enterClass="animate-enter fade-in-10 slide-in-from-b-20 animate-duration-1000"
+        >
+            <div class="p-4 flex flex-col border-slate-200 pricing-card cursor-pointer border-2 hover:border-primary duration-300 transition-all" style="border-radius: 10px">
+                <div class="text-center my-8 text-3xl">Mensuel</div>
+                <img src="https://primefaces.org/cdn/templates/sakai/landing/startup.svg" class="w-10/12 mx-auto" alt="startup" />
+                <div class="my-8 flex flex-col items-center gap-4">
+                    <div class="flex items-center">
+                        <span class="text-5xl font-bold mr-2">€9.99</span>
+                        <span class="">par mois</span>
+                    </div>
+                    <button pButton pRipple label="Get Started" routerLink="/login" class="p-button-rounded border-0 ml-4 font-light leading-tight bg-blue-500 text-white"></button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-span-12 lg:col-span-4 p-0 md:p-4 mt-6 md:mt-0"
+            pAnimateOnScroll
+            enterClass="animate-enter fade-in-10 slide-in-from-t-20 animate-duration-1000"
+        >
+            <div class="p-4 flex flex-col border-slate-200 pricing-card cursor-pointer border-2 hover:border-primary duration-300 transition-all" style="border-radius: 10px">
+                <div class="text-center my-8 text-3xl">Annuel</div>
+                <img src="https://primefaces.org/cdn/templates/sakai/landing/enterprise.svg" class="w-10/12 mx-auto" alt="enterprise" />
+                <div class="my-8 flex flex-col items-center gap-4">
+                    <div class="flex items-center">
+                        <span class="text-5xl font-bold mr-2">€99.99</span>
+                        <span class="">per month</span>
+                    </div>
+                    <button pButton pRipple label="Get Started" routerLink="/login" class="p-button-rounded border-0 ml-4 font-light leading-tight bg-blue-500 text-white"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
