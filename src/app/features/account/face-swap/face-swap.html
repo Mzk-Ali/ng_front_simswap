@@ -1,0 +1,102 @@
+<app-main-title>Bienvenue sur Face Swap, </app-main-title>
+
+
+<section pAnimateOnScroll 
+    id="face-swap"
+    class="bg-[#f8f9fa] rounded-xl p-5 shadow-lg my-5 md:my-10 flex flex-col items-center gap-5"
+    enterClass="animate-enter fade-in-10 zoom-in-50 animate-duration-1000"
+>
+    <h2 class="font-semibold text-lg md:text-xl text-center">Zone d'application du Face Swap</h2>
+    <p class="italic text-xs md:text-sm text-center">
+        Pour utiliser faceSwap, il suffit simplement d'uploader vos images dans la zone ci-dessous et de lancer le processus pour récupérer le résultat.
+    </p>
+
+    <div class="w-full space-y-4 md:space-y-8">
+        <div class="w-full md:w-2/4 mx-auto">
+            <p-selectbutton [options]="stateOptions"
+                [(ngModel)]="value"
+                optionLabel="label"
+                optionValue="value"
+                optionDisabled="constant"
+                styleClass="whitespace-nowrap w-full"
+                fluid
+            />
+        </div>
+        <div class="bg-slate-100 rounded-lg p-2 lg:p-5 flex flex-col items-center gap-5 md:gap-14 md:justify-between md:flex-row">
+            @if (value == 'single') {
+                <form [formGroup]="singleFaceForm"
+                    (ngSubmit)="onSubmit()"
+                    class="flex flex-col gap-5 w-full"
+                >
+                    <div class="flex justify-around gap-2">
+                        @if (swap.originalImage?.url) {
+                            <div class="relative cursor-pointer border-2 border-dashed border-violet-200 rounded-xl w-1/2 p-5 bg-violet-100">
+                                <img [src]="swap.originalImage?.url" alt="Preview Original" class="w-full h-full object-contain rounded-xl"/>
+                                <button type="button"
+                                        class="absolute top-2 right-2 bg-violet-50 text-red-300 rounded-xl px-2 py-1 shadow-lg cursor-pointer hover:-translate-y-1"
+                                        (click)="removeFile('originalImage', $event)">
+                                    <i class="pi pi-times"></i>
+                                </button>
+                            </div>
+                        } @else {
+                            <label for="originalImage" class="flex flex-col justify-between items-center gap-2.5 p-2 md:px-5 md:py-3 cursor-pointer border-2 border-dashed border-violet-200 rounded-xl">
+                                <input type="file" accept="image/*" id="originalImage" formControlName="originalImage" class="absolute w-0 h-0 opacity-0" (change)="onFileSelected($event, 'originalImage')"/>
+                                <i class="pi pi-image text-slate-400" style="font-size: 5rem;"></i>
+                                <span class="text-sm font-semibold text-slate-400 text-center">
+                                    Ajouter l'image originale ici <br>
+                                    <strong>ou</strong>
+                                </span>
+                                <div class="text-md text-center font-semibold p-1 border-2 border-violet-200 border-dashed text-violet-400 rounded-lg hover:bg-violet-100">
+                                    Cliquez pour télécharger
+                                </div>
+                            </label>
+                        }
+                        @if (swap.faceImage?.url) {
+                            <div class="relative cursor-pointer border-2 border-dashed border-violet-200 rounded-xl w-1/2 p-5 bg-violet-100">
+                                <img [src]="swap.faceImage?.url" alt="Preview Original" class="w-full h-full object-contain rounded-xl"/>
+                                <button type="button"
+                                        class="absolute top-2 right-2 bg-violet-50 text-red-300 rounded-xl px-2 py-1 shadow-lg cursor-pointer hover:-translate-y-1"
+                                        (click)="removeFile('faceImage', $event)">
+                                    <i class="pi pi-times"></i>
+                                </button>
+                            </div>
+                        } @else {
+                            <label for="faceImage" class="flex flex-col justify-between items-center gap-2.5 p-2 md:px-5 md:py-3 cursor-pointer border-2 border-dashed border-violet-200 rounded-xl">
+                                <input type="file" accept="image/*" id="faceImage" formControlName="faceImage" class="hidden" (change)="onFileSelected($event, 'faceImage')"/>
+                                <i class="pi pi-user text-slate-400" style="font-size: 5rem;"></i>
+                                <span class="text-sm font-semibold text-slate-400 text-center">
+                                    Ajouter le visage ici <br>
+                                    <strong>ou</strong>
+                                </span>
+                                <div class="text-md text-center font-semibold p-1 border-2 border-violet-200 border-dashed text-violet-400 rounded-lg hover:bg-violet-100">
+                                    Cliquez pour télécharger
+                                </div>
+                            </label>
+                        }
+                    </div>
+                    <p-button label="Commencez le Face Swap"
+                        type="submit"
+                        styleClass="w-full"
+                        severity="help"
+                        [disabled]="singleFaceForm.invalid"
+                    ></p-button>
+                </form>
+                <div class="w-full max-w-sm p-4 md:p-10 border border-violet-100 bg-white rounded-2xl shadow-lg">
+                    <img src="/images/illustrations/face-swap.jpg" alt="Illustration Face Swap" class="w-full">
+                </div>
+            } @else {
+                Test2
+            }
+
+        </div>
+    </div>
+</section>
+
+<section pAnimateOnScroll 
+    id="list-face-swap"
+    class="bg-[#f8f9fa] rounded-xl p-5 shadow-lg my-5 md:my-10 flex flex-col items-center gap-5"
+    enterClass="animate-enter fade-in-10 zoom-in-50 animate-duration-1000"
+>
+    <h2 class="font-semibold text-lg md:text-xl text-center">Historique des Face Swap</h2>
+    
+</section>
