@@ -1,8 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
 import { MegaMenuItem, MenuItem } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { Menu } from 'primeng/menu';
+import { AuthService } from '../../core/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -10,18 +12,22 @@ import { Menu } from 'primeng/menu';
   templateUrl: './header.html',
   styleUrl: './header.css',
 })
-export class Header implements OnInit {
-  isAuthenticated = false;
+export class Header {
+  private readonly authService  = inject(AuthService);
+  private readonly router       = inject(Router);
+  isAuthenticated = this.authService.isAuthenticated;
   mobileItems: MenuItem[] | undefined;
   desktopItems: MegaMenuItem[] | undefined;
 
-  ngOnInit() {
-    this.buildMobileMenus();
-    this.buildDesktopMenus();
+  constructor() {
+    effect(() => {
+      this.buildMobileMenus();
+      this.buildDesktopMenus();
+    })
   }
 
   private buildMobileMenus() {
-    if (this.isAuthenticated) {
+    if (this.isAuthenticated()) {
       this.mobileItems = [
         { label: 'Dashboard', icon: 'pi pi-home', command: () => this.go('/dashboard') },
         { label: 'Profil', icon: 'pi pi-user', command: () => this.go('/profile') },
@@ -37,24 +43,48 @@ export class Header implements OnInit {
   }
 
   private buildDesktopMenus() {
-    if (this.isAuthenticated) {
+    if (this.isAuthenticated()) {
       this.desktopItems = [
-        { label: 'Mon abonnement', root: true },
+        {
+          label: 'Mon abonnement',
+          route: '/mon-abonnement',
+        },
       ];
     } else {
       this.desktopItems = [
-        { label: 'Prix', id: 'pricing' },
-        { label: 'FAQ', id: 'faq' },
+        {
+          label: 'Prix',
+          route: '/',
+          fragment: 'pricing'
+        },
+        {
+          label: 'Faq',
+          route: '/',
+          fragment: 'faq'
+        },
       ];
     }
   }
 
   private go(path: string) {
-    console.log('Navigating to', path);
-    
+    if (path.includes('#')) {
+      const [route, fragment] = path.split('#');
+      this.router.navigate([route], { fragment });
+    } else {
+      this.router.navigate([path]);
+    }
   }
 
-  private logout() {
+  public navigate(item: any) {
+    if (item.route) {
+      this.router.navigate([item.route], {
+        fragment: item.fragment,
+      });
+    }
+  }
+
+  logout() {
     console.log('Logout');
+    this.authService.logout();
   }
 }

@@ -1,5 +1,6 @@
 <header class="app-header">
-    <a class="logo-wrapper" href="/">
+    <a class="logo-wrapper" 
+        [attr.href]="!isAuthenticated() ? '/face-swap' : '/'">
         <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
             width="50" height="50" viewBox="0 0 540.000000 540.000000"
             preserveAspectRatio="xMidYMid meet"
@@ -50,23 +51,33 @@
                 744 -9 100 -6 206 5 206 1 0 23 -36 48 -79z"/>
             </g>
         </svg>
-        <span class="logo-text">SimSwap</span>
+        <span class="logo-text">FaceSwap</span>
     </a>
     <nav class="nav-desktop">
         <ul class="navbar-end">
-            <li *ngFor="let item of desktopItems" class="desktop-menu-item" >
-                <a [href]="item.id ? '#' + item.id : ''">{{ item.label }}</a>
-            </li>
-            <li>
-                <a class="navbar-item" href="/login">
-                    <button pButton type="button" label="Login"></button>
-                </a>
-            </li>
-            <li>
-                <a class="navbar-item" href="/register">
-                    <button pButton type="button" label="Register"></button>
-                </a>
-            </li>
+            @for(item of desktopItems; track item.label){
+                <li class="desktop-menu-item" >
+                    <a [attr.href]="item['fragment'] ? '#' + item['fragment'] : item['route']">{{ item.label }}</a>
+                </li>
+            }
+            @if (isAuthenticated()) {
+                <li>
+                    <a class="navbar-item" (click)="logout()">
+                        <button pButton type="button" label="Logout"></button>
+                    </a>
+                </li>
+            } @else {
+                <li>
+                    <a class="navbar-item" href="/login">
+                        <button pButton type="button" label="Login"></button>
+                    </a>
+                </li>
+                <li>
+                    <a class="navbar-item" href="/register">
+                        <button pButton type="button" label="Register"></button>
+                    </a>
+                </li>
+            }
         </ul>
     </nav>
     <div class="nav-mobile">

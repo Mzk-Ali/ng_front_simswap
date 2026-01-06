@@ -27,7 +27,7 @@
     scrollbar-width: thin;
     scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
     padding: 2px;
-    padding-top: 130px;
+    padding-top: 120px;
     animation: expandOverlay 0.5s ease-out forwards;
     display: flex;
     flex-direction: column;

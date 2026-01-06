@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { authRoutes } from './features/auth/auth.routes';
 import { errorRoutes } from './features/errors/error.routes';
 import { authGuard, roleGuard } from './core/guards/auth.guard';
+import { accountRoutes } from './features/account/account.routes';
 
 export const routes: Routes = [
     {
@@ -21,6 +22,7 @@ export const routes: Routes = [
                     .then(m => m.HomePage),
             },
             ... authRoutes,
+            ... accountRoutes,
             ... errorRoutes,
         ]
     },
