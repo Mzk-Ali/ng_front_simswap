@@ -21,24 +21,25 @@ export class TokenService {
     setTokens(tokensResponse: TokensResponse): void {
         localStorage.setItem('access_token', tokensResponse.accessToken);
         localStorage.setItem('refresh_token', tokensResponse.refreshToken);
+        const expiresAt = Date.now() + (tokensResponse.expiresIn * 1000);
+        localStorage.setItem('token_expires_at', expiresAt.toString());
     }
 
     clearTokens(): void {
         localStorage.removeItem('access_token');
         localStorage.removeItem('refresh_token');
+        localStorage.removeItem('token_expires_at');
     }
-
-
 
     isAuthenticated(): boolean {
         const token = this.getAccessToken();
         const expiresAt = this.getTokenExpiresAt();
 
         if (!token || !expiresAt) {
-        return false;
+            return false;
         }
 
-        return Date.now() < expiresAt + 30 * 1000;
+        return Date.now() < expiresAt;
     }
 
     shouldRefreshToken(): boolean {

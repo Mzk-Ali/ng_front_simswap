@@ -3,7 +3,7 @@ import { inject, Injectable, signal } from "@angular/core";
 import { DeviceInfoService } from "./device-info.service";
 import { Router } from "@angular/router";
 import { AuthState, LoginRequest, LogoutRequest, RefreshTokenRequest, RegisterRequest, RegisterResponse, TokensResponse } from "../models/auth.model";
-import { BehaviorSubject, catchError, finalize, map, Observable, of, tap, throwError } from "rxjs";
+import { BehaviorSubject, catchError, finalize, map, Observable, tap, throwError } from "rxjs";
 import { User } from "../models/user.model";
 import { TokenService } from "./token.service";
 import { ApiResponse } from "../models/response.model";
@@ -22,9 +22,11 @@ export class AuthService {
     private readonly currentUserSubject     = new BehaviorSubject<User | null>(null);
     public readonly currentUser$            = this.currentUserSubject.asObservable();
 
-    public readonly isAuthenticated         = signal<boolean>(false);
+    private readonly _isAuthenticated                = signal<boolean>(this.tokenService.isAuthenticated());
     private readonly refreshTokenSubject    = new BehaviorSubject<string | null>(null);
     private isRefreshing                    = false;
+
+    public readonly isAuthenticated = this._isAuthenticated.asReadonly();
 
     login(email: string, password: string): Observable<TokensResponse> {
         const deviceInfo = this.deviceInfoService.getDeviceInfo();
@@ -38,6 +40,7 @@ export class AuthService {
         return this.http.post<ApiResponse<TokensResponse>>(`${this.API_URL}/authenticate`, loginRequest).pipe(
             map(response => {
                 if(!response.success || !response.data) {
+                    console.log(response);
                     throw new Error(response.message);
                 }
                 return response.data;
@@ -120,7 +123,7 @@ export class AuthService {
         if (!refreshToken) {
             this.tokenService.clearTokens();
             this.currentUserSubject.next(null);
-            this.isAuthenticated.set(false);
+            this._isAuthenticated.set(false);
             this.router.navigate(['/login']);
             return;
         }
@@ -130,15 +133,16 @@ export class AuthService {
             ...deviceInfo,
         };
 
-        this.http.post<ApiResponse<void>>(`${this.API_URL}/logout`, { logoutRequest }).pipe(
-                catchError(() => of(null))
+        this.http.post<ApiResponse<void>>(`${this.API_URL}/logout`, logoutRequest).pipe(
+                finalize(() => {
+                    this.tokenService.clearTokens();
+                    this.currentUserSubject.next(null);
+                    this._isAuthenticated.set(false);
+                    this.router.navigate(['/login']);
+                })
             )
             .subscribe();
 
-        this.tokenService.clearTokens();
-        this.currentUserSubject.next(null);
-        this.isAuthenticated.set(false);
-        this.router.navigate(['/login']);
     }
 
     getCurrentUser(): Observable<User> {
@@ -154,17 +158,13 @@ export class AuthService {
         );
     }
 
-    isUserAuthenticated(): boolean {
-        return this.tokenService.isAuthenticated();
-    }
-
     getAuthState(): AuthState {
         return this.tokenService.getAuthState();
     }
 
     private handleAuthSuccess(response: TokensResponse): void {
         this.tokenService.setTokens(response);
-        this.isAuthenticated.set(true);
+        this._isAuthenticated.set(true);
 
         this.getCurrentUser().subscribe();
     }
@@ -173,15 +173,18 @@ export class AuthService {
         console.error('Erreur d\'authentification:', error);
 
         let errorMessage = 'Une erreur est survenue';
+        console.log(error.error);
 
-        if (error.status === 401) {
+        if (error.error?.message) {
+            errorMessage = error.error.message;
+        } else if (error.status === 401) {
             errorMessage = 'Email ou mot de passe incorrect';
         } else if (error.status === 403) {
             errorMessage = 'Accès refusé';
         } else if (error.status === 409) {
             errorMessage = 'Cet email est déjà utilisé';
-        } else if (error.error?.message) {
-            errorMessage = error.error.message;
+        } else if (error.status === 429) {
+            errorMessage = error.statusText;
         }
 
         return throwError(() => new Error(errorMessage));

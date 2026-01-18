@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, effect, inject } from '@angular/core';
+import { Component, effect, inject, signal, WritableSignal } from '@angular/core';
 import { MegaMenuItem, MenuItem } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { Menu } from 'primeng/menu';
 import { AuthService } from '../../core/services/auth.service';
 import { Router } from '@angular/router';
+import { TokenService } from '../../core/services/token.service';
 
 @Component({
   selector: 'app-header',
@@ -14,16 +15,25 @@ import { Router } from '@angular/router';
 })
 export class Header {
   private readonly authService  = inject(AuthService);
+  private readonly tokenService = inject(TokenService);
   private readonly router       = inject(Router);
-  isAuthenticated = this.authService.isAuthenticated;
+
+  isAuthenticated               = this.authService.isAuthenticated;
   mobileItems: MenuItem[] | undefined;
   desktopItems: MegaMenuItem[] | undefined;
+
+  dropdownIsOpen: WritableSignal<boolean> = signal(false);
 
   constructor() {
     effect(() => {
       this.buildMobileMenus();
       this.buildDesktopMenus();
     })
+  }
+
+  public toggleDropdown() {
+    console.log(this.dropdownIsOpen());
+    this.dropdownIsOpen.set(!this.dropdownIsOpen());
   }
 
   private buildMobileMenus() {

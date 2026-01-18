@@ -62,9 +62,38 @@
             }
             @if (isAuthenticated()) {
                 <li>
-                    <a class="navbar-item" (click)="logout()">
+                    <div class="relative flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
+                        <button (click)="toggleDropdown()" class="flex items-center p-2 rounded-lg cursor-pointer hover:bg-gray-200">
+                            <span class="pi pi-user"></span>
+                        </button>
+                        <!-- Dropdown menu -->
+                         @if(dropdownIsOpen()){
+                             <div class="absolute top-20 right-0 z-50 bg-white border border-slate-300 rounded-md shadow-lg w-80">
+                                 <div class="px-4 py-3 text-sm border-b border-slate-200">
+                                     <span class="block text-center font-semibold truncate">name@flowbite.com</span>
+                                 </div>
+                                 <ul class=" flex flex-col text-sm font-medium *:w-full" aria-labelledby="user-menu-button">
+                                    <li>
+                                        <a href="#" class="flex justify-center items-center w-full p-2 hover:bg-violet-300 hover:text-heading rounded">Dashboard</a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="flex justify-center items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded">Settings</a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="flex justify-center items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded">Earnings</a>
+                                    </li>
+                                    <li>
+                                        <button (click)="logout()"  class="flex justify-center items-center w-full p-2 hover:bg-red-300 hover:text-heading rounded">Sign out</button>
+                                    </li>
+                                 </ul>
+                             </div>
+
+                         }
+                    </div>
+                    
+                    <!-- <a class="navbar-item" (click)="logout()">
                         <button pButton type="button" label="Logout"></button>
-                    </a>
+                    </a> -->
                 </li>
             } @else {
                 <li>

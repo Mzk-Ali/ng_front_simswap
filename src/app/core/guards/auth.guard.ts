@@ -9,7 +9,7 @@ export const authGuard: CanActivateFn = (
     const authService = inject(AuthService);
     const router = inject(Router);
 
-    if (authService.isUserAuthenticated()) {
+    if (authService.isAuthenticated()) {
         return true;
     }
 
@@ -26,7 +26,7 @@ export const publicGuard: CanActivateFn = () => {
     const authService = inject(AuthService);
     const router = inject(Router);
 
-    if (authService.isUserAuthenticated()) {
+    if (authService.isAuthenticated()) {
         router.navigate(['/']);
         return false;
     }
