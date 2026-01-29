@@ -11,6 +11,8 @@ footer {
     padding: 10px;
     gap: 10px;
     font-weight: 400;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: small;
 }
 
 footer ul{
@@ -35,5 +37,15 @@ footer ul li a:hover {
     footer {
         height: 60px;
         flex-direction: row;
+        font-size: smaller;
+    }
+}
+
+@media (min-width: 1024px) {
+    footer {
+        font-size: medium;
+    }
+    footer ul {
+        gap: 40px;
     }
 }
