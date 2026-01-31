@@ -3,6 +3,7 @@ import { authRoutes } from './features/auth/auth.routes';
 import { errorRoutes } from './features/errors/error.routes';
 import { authGuard, roleGuard } from './core/guards/auth.guard';
 import { accountRoutes } from './features/account/account.routes';
+import { documentRoutes } from './features/documents/document.routes';
 
 export const routes: Routes = [
     {
@@ -23,6 +24,7 @@ export const routes: Routes = [
             },
             ... authRoutes,
             ... accountRoutes,
+            ... documentRoutes,
             ... errorRoutes,
         ]
     },
