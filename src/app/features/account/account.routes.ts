@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { publicGuard } from '../../core/guards/auth.guard';
+import { publicGuard, authGuard } from '../../core/guards/auth.guard';
 
 export const accountRoutes: Routes = [
     { 
@@ -11,7 +11,7 @@ export const accountRoutes: Routes = [
     },
     { 
         path: 'mon-abonnement',
-        canActivate: [publicGuard],
+        canActivate: [authGuard],
         loadComponent: () => 
             import('./my-subscription/my-subscription').then(c => c.MySubscription),
         title: 'Mon Abonnement'

@@ -5,6 +5,9 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { Button } from "primeng/button";
 import { MessageService } from 'primeng/api';
 import { MessageModule } from 'primeng/message';
+import { SubscriptionService } from '../services/subscription.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-my-subscription',
@@ -13,51 +16,85 @@ import { MessageModule } from 'primeng/message';
   styleUrl: './my-subscription.css',
 })
 export class MySubscription implements OnInit {
-  private readonly fb             = inject(FormBuilder);
-  private readonly messageService = inject(MessageService);
+    private readonly fb                   = inject(FormBuilder);
+    private readonly subscriptionService  = inject(SubscriptionService);
+    private readonly authService          = inject(AuthService);
+    private readonly messageService       = inject(MessageService);
+    private readonly router               = inject(Router);
+    private readonly route                = inject(ActivatedRoute);
 
-  subscriptionForm: FormGroup;
-  formSubmitted: boolean = false;
+    subscriptionForm: FormGroup;
+    formSubmitted: boolean = false;
 
-  readonly hasSubscription = signal(false);
-  subscription: string = 'Annuel';
+    readonly hasSubscription = signal(false);
+    subscription: string = 'Annuel';
 
-  constructor() {
-      this.subscriptionForm = this.fb.group({
-          selectedSubscription: [this.subscription, Validators.required]
-      });
-  }
+    isLoading = signal(false);
+        
+    errorMessage = signal<string | null>(null);
 
-  ngOnInit(): void {
-    if (this.hasSubscription()) {
-      this.subscriptionForm.disable();
-    } else {
-      this.subscriptionForm.enable();
-    }
-    
-  }
-
-
-  isInvalid(controlName: string) {
-      const control = this.subscriptionForm.get(controlName);
-      return control?.invalid &&  this.formSubmitted;
-  }
-
-  onSubmit() {
-    console.log("soumettre")
-    this.formSubmitted = true;
-
-    if (this.subscriptionForm.valid) {
-        this.messageService.add({
-            severity: 'success',
-            summary: 'Success',
-            detail: 'Form is submitted',
-            life: 3000
+    constructor() {
+        this.subscriptionForm = this.fb.group({
+            selectedSubscription: [null, Validators.required]
         });
-
-        this.subscriptionForm.reset();
-
-        this.formSubmitted = false;
     }
-  }
+
+    ngOnInit(): void {
+        if (this.hasSubscription()) {
+        this.subscriptionForm.disable();
+        } else {
+        this.subscriptionForm.enable();
+        }
+        
+    }
+
+
+    isInvalid(controlName: string) {
+        const control = this.subscriptionForm.get(controlName);
+        return control?.invalid &&  this.formSubmitted;
+    }
+
+    onSubmit() {
+        this.formSubmitted = true;
+
+        if (this.subscriptionForm.invalid) {
+            this.subscriptionForm.markAllAsTouched();
+            return;
+        }
+
+        const user = this.authService.getCurrentUserSnapshot();
+        if (!user) {
+            this.authService.currentUser$.subscribe(u => {
+                if (u) {
+                    this.executeSubscription(u.authUserId, this.subscriptionForm.value.selectedSubscription);
+                } else {
+                    this.messageService.add({ severity: 'error', summary: 'Session expirée', detail: 'Veuillez vous reconnecter' });
+                }
+            });
+            return;
+        }
+
+        const planId: number = this.subscriptionForm.value.selectedSubscription;
+
+        this.errorMessage.set(null);
+        this.executeSubscription(user.authUserId, planId);
+    }
+
+    private executeSubscription(userId: string, planId: number) {
+        this.isLoading.set(true);
+        this.subscriptionService.subscribe(userId, planId).subscribe({
+            next: () => {
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Succès',
+                    detail: 'Abonnement activé !'
+                });
+            },
+            error: (err) => {
+                this.errorMessage.set(err.message);
+                this.isLoading.set(false);
+            },
+            complete: () => this.isLoading.set(false)
+        });
+    }
 }

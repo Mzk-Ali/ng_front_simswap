@@ -28,6 +28,14 @@ export class AuthService {
 
     public readonly isAuthenticated = this._isAuthenticated.asReadonly();
 
+    constructor() {
+        const storedUser = localStorage.getItem('user_data');
+        if (storedUser) {
+            this.currentUserSubject.next(JSON.parse(storedUser));
+            this._isAuthenticated.set(true);
+        }
+    }
+
     login(email: string, password: string): Observable<TokensResponse> {
         const deviceInfo = this.deviceInfoService.getDeviceInfo();
 
@@ -145,17 +153,24 @@ export class AuthService {
 
     }
 
-    getCurrentUser(): Observable<User> {
-        return this.http.get<User>(`${this.API_URL}/me`).pipe(
-            tap((user) => {
-                this.currentUserSubject.next(user);
-                localStorage.setItem('user_data', JSON.stringify(user));
+    getCurrentUser(): Observable<ApiResponse<User>> {
+        return this.http.get<ApiResponse<User>>(`${this.API_URL}/me`).pipe(
+            tap((response) => {
+                if (!response.data) {
+                    throw new Error("Utilisateur non fourni par l'API");
+                }
+                this.currentUserSubject.next(response.data);
+                localStorage.setItem('user_data', JSON.stringify(response.data));
             }),
             catchError((error) => {
                 console.error("Erreur lors de la récupération de l'utilisateur:", error);
                 return throwError(() => error);
             })
         );
+    }
+
+    getCurrentUserSnapshot(): User | null {
+        return this.currentUserSubject.value;
     }
 
     getAuthState(): AuthState {
