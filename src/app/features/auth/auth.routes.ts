@@ -30,4 +30,11 @@ export const authRoutes: Routes = [
             import('./reset-password/reset-password').then(c => c.ResetPassword),
         title: 'Réinitialiser le mot de passe'
     },
+        {
+        path: 'auth/verify-email/:verifyEmail',
+        canActivate: [publicGuard],
+        loadComponent: () => 
+            import('./verify-email/verify-email').then(c => c.VerifyEmail),
+        title: "Vérification de l'email"
+    },
 ];

@@ -49,3 +49,7 @@ export interface AuthState {
     refreshToken: string | null;
     expiresAt: number | null;
 }
+
+export interface VerifyEmailRequest {
+    verifyEmailToken: string;
+}

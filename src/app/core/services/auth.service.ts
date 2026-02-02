@@ -2,7 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { inject, Injectable, signal } from "@angular/core";
 import { DeviceInfoService } from "./device-info.service";
 import { Router } from "@angular/router";
-import { AuthState, LoginRequest, LogoutRequest, RefreshTokenRequest, RegisterRequest, RegisterResponse, TokensResponse } from "../models/auth.model";
+import { AuthState, LoginRequest, LogoutRequest, RefreshTokenRequest, RegisterRequest, RegisterResponse, TokensResponse, VerifyEmailRequest } from "../models/auth.model";
 import { BehaviorSubject, catchError, finalize, map, Observable, tap, throwError } from "rxjs";
 import { User } from "../models/user.model";
 import { TokenService } from "./token.service";
@@ -151,6 +151,23 @@ export class AuthService {
             )
             .subscribe();
 
+    }
+
+
+    verifyEmail(verifyEmailToken :string): Observable<ApiResponse<void>> {
+        const verifyEmailRequest: VerifyEmailRequest = {
+            verifyEmailToken
+        };
+
+        return this.http.post<ApiResponse<void>>(`${this.API_URL}/verify-email`, verifyEmailRequest).pipe(
+            map(response => {
+                if(!response.success || !response.data) {
+                    throw new Error(response.message);
+                }
+                return response.data;
+            }),
+            catchError((error) => this.handleAuthError(error))
+        );
     }
 
     getCurrentUser(): Observable<ApiResponse<User>> {
