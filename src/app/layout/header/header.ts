@@ -59,6 +59,10 @@ export class Header {
           label: 'Mon abonnement',
           route: '/mon-abonnement',
         },
+        {
+          label: 'Mes factures',
+          route: '/mes-factures',
+        },
       ];
     } else {
       this.desktopItems = [

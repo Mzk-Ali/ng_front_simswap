@@ -1,8 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
-import { Router } from "@angular/router";
 import { BehaviorSubject, map, Observable } from "rxjs";
-import { SubscribeRequest, SubscribeResponse } from "../models/subscription.model";
+import { SubscribeRequest, SubscribeResponse, UserSubscriptionResponse } from "../models/subscription.model";
 import { ApiResponse } from "../../../core/models/response.model";
 import { User } from "../../../core/models/user.model";
 
@@ -20,13 +19,24 @@ export class SubscriptionService {
 
 
     subscribe(userId: string, planId: number): Observable<SubscribeResponse> {
-
         const subscribeRequest: SubscribeRequest = {
             userId,
             planId
         };
 
         return this.http.post<ApiResponse<SubscribeResponse>>(`${this.API_URL}/subscribe`, subscribeRequest).pipe(
+            map(response => {
+                if(!response.success || !response.data) {
+                    console.log(response);
+                    throw new Error(response.message);
+                }
+                return response.data;
+            }),
+        );
+    }
+
+    cancelSubscription(subscriptionId: number): Observable<UserSubscriptionResponse> {
+        return this.http.put<ApiResponse<UserSubscriptionResponse>>(`${this.API_URL}/${subscriptionId}/cancel`, {}).pipe(
             map(response => {
                 if(!response.success || !response.data) {
                     console.log(response);

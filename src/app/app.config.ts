@@ -4,7 +4,7 @@ import { providePrimeNG } from 'primeng/config';
 
 import { routes } from './app.routes';
 import MyPreset from './mypreset';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
 
@@ -20,6 +20,7 @@ export const appConfig: ApplicationConfig = {
     ),
     provideHttpClient(withInterceptors([authInterceptor])),
     MessageService,
+    ConfirmationService,
     providePrimeNG({
             theme: {
                 preset: MyPreset,

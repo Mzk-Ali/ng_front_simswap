@@ -1,0 +1,22 @@
+<app-main-title>Vos Paramètres de compte</app-main-title>
+
+<section pAnimateOnScroll 
+    id="terms-of-service"
+    class="bg-[#f8f9fa] rounded-xl shadow-lg mt-5 h-auto"
+    enterClass="animate-enter fade-in-10 zoom-in-50 animate-duration-1000"
+>
+    <p-tabs lazy value="password">
+        <p-tablist>
+            <p-tab value="password">Mot de passe</p-tab>
+            <p-tab value="account">Compte</p-tab>
+        </p-tablist>
+        <p-tabpanels>
+            <p-tabpanel value="password">
+                <app-password></app-password>
+            </p-tabpanel>
+            <p-tabpanel value="account">
+                <app-account></app-account>
+            </p-tabpanel>
+        </p-tabpanels>
+    </p-tabs>
+</section>

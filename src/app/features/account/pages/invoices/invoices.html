@@ -1,0 +1,68 @@
+<app-main-title>Mes factures</app-main-title>
+
+<section pAnimateOnScroll 
+    id="terms-of-service"
+    class="bg-[#f8f9fa] rounded-xl p-5 shadow-lg mt-5"
+    enterClass="animate-enter fade-in-10 zoom-in-50 animate-duration-1000"
+>
+    <div *ngIf="loading()" class="loading flex flex-col justify-center items-center text-primary gap-3">
+        <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+        <p class="text-xl">Chargement des factures...</p>
+    </div>
+
+    <div *ngIf="error()" class="text-center text-red-500 font-semibold flex flex-col gap-3">
+        <i class="pi pi-exclamation-triangle" style="font-size: 2rem"></i>
+        Erreur lors de la récupération de vos factures
+    </div>
+
+    <div *ngIf="!loading() && !error() && invoices().length === 0" class="text-primary text-center">
+        <h3 class="font-bold">Vous n'avez aucune facture pour l'instant</h3>
+        <p class="italic">Vos factures apparaîtront ici après votre première souscription</p>
+    </div>
+
+    <div *ngIf="!loading() && !error() && invoices().length > 0" class="invoices-list">
+        <div class="invoices-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Montant</th>
+                        <th>Statut</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let invoice of invoices()">
+                        <td class="date-cell">
+                            {{ formatDate(invoice.createdAt) }}
+                        </td>
+                        <td class="amount-cell">
+                            {{ formatAmount(invoice.amount, invoice.currency) }}
+                        </td>
+                        <td>
+                            <span [class]="'status-badge ' + getStatusClass(invoice.status)">
+                                {{ getStatusLabel(invoice.status) }}
+                            </span>
+                        </td>
+                        <td class="actions-cell">
+                            <a 
+                                *ngIf="invoice.invoiceUrl"
+                                [href]="invoice.invoiceUrl" 
+                                target="_blank"
+                                class="btn btn-sm btn-secondary">
+                                Voir
+                            </a>
+                            <a 
+                                *ngIf="invoice.invoicePdf"
+                                [href]="invoice.invoicePdf" 
+                                target="_blank"
+                                class="btn btn-sm btn-primary">
+                                PDF
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>

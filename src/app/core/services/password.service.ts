@@ -18,7 +18,7 @@ export class PasswordService {
         oldPassword: string,
         newPassword: string,
         confirmNewPassword: string
-    ): Observable<void> {
+    ): Observable<ApiResponse<void>> {
         const changePasswordRequest: ChangePasswordRequest = {
             oldPassword,
             newPassword,
@@ -27,10 +27,10 @@ export class PasswordService {
 
         return this.http.post<ApiResponse<void>>(`${this.API_URL}/change-password`, changePasswordRequest).pipe(
             map(response => {
-                if(!response.success) {
+                if(!response.success || !response.data) {
                     throw new Error(response.message);
                 }
-                return;
+                return response.data;
             }),
             catchError((error) => this.handlePasswordError(error))
         );

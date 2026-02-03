@@ -201,7 +201,7 @@ export class AuthService {
         this.getCurrentUser().subscribe();
     }
 
-    private handleAuthError(error: any): Observable<never> {
+    handleAuthError(error: any): Observable<never> {
         console.error('Erreur d\'authentification:', error);
 
         let errorMessage = 'Une erreur est survenue';

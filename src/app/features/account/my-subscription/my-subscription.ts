@@ -83,16 +83,26 @@ export class MySubscription implements OnInit {
     private executeSubscription(userId: string, planId: number) {
         this.isLoading.set(true);
         this.subscriptionService.subscribe(userId, planId).subscribe({
-            next: () => {
-                this.messageService.add({
-                    severity: 'success',
-                    summary: 'Succès',
-                    detail: 'Abonnement activé !'
-                });
+            next: (response) => {
+                if (response?.checkoutUrl) {
+                    globalThis.location.href = response.checkoutUrl;
+                } else {
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: 'Erreur',
+                        detail: 'URL de paiement introuvable.'
+                    });
+                    this.isLoading.set(false);
+                }
             },
             error: (err) => {
                 this.errorMessage.set(err.message);
                 this.isLoading.set(false);
+                this.messageService.add({ 
+                    severity: 'error', 
+                    summary: 'Erreur', 
+                    detail: err.message 
+                });
             },
             complete: () => this.isLoading.set(false)
         });
