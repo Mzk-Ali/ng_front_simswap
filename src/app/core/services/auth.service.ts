@@ -161,10 +161,11 @@ export class AuthService {
 
         return this.http.post<ApiResponse<void>>(`${this.API_URL}/verify-email`, verifyEmailRequest).pipe(
             map(response => {
-                if(!response.success || !response.data) {
+                if(!response.success) {
                     throw new Error(response.message);
                 }
-                return response.data;
+                this.router.navigate(['/login'])
+                return response;
             }),
             catchError((error) => this.handleAuthError(error))
         );

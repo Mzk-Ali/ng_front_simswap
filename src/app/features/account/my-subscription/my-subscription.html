@@ -8,16 +8,37 @@
             </span>
             <p class="pl-5 italic text-purple-700 flex items-center gap-5">
                 <i class="pi pi-arrow-right"></i>
-                Simswap Mensuel (9.99)
+                {{ activeSubscriptionDetails()?.plan?.name }} 
+                ({{ activeSubscriptionDetails()?.plan?.price }} {{ activeSubscriptionDetails()?.plan?.currency }})
+            </p>
+            <p class="text-sm text-slate-500 ml-9 font-bold flex items-center gap-2">
+                Statut : 
+                <span [class]="getStatusClass(activeSubscriptionDetails()?.status)" class="uppercase font-bold">
+                    {{ activeSubscriptionDetails()?.status }}
+                </span> 
+                <span class="text-slate-300 font-light mx-1">|</span>
+                <span class="font-medium italic">
+                    Fin de période : {{ activeSubscriptionDetails()?.currentPeriodEnd | date:'dd/MM/yyyy' }}
+                </span>
             </p>
         </div>
-        <p-button label="Annuler mon abonnement"
+        <!-- <p-button label="Annuler mon abonnement"
             type="submit"
             icon="pi pi-times"
             iconPos="left"
             severity="secondary"
             styleClass="mx-auto whitespace-nowrap flex items-center"
-        />
+        /> -->
+        @if (!activeSubscriptionDetails()?.cancelAtPeriodEnd) {
+            <p-button label="Annuler mon abonnement"
+                (onClick)="onCancelSubscription()"
+                icon="pi pi-times"
+                severity="secondary"
+                styleClass="whitespace-nowrap"
+            />
+        } @else {
+            <span class="text-orange-500 font-medium italic text-sm">Fin de contrat programmée</span>
+        }
     </section>
 } @else {
     <section class="flex flex-col items-center gap-10 p-5 italic font-medium text-slate-400 text-center md:p-10">

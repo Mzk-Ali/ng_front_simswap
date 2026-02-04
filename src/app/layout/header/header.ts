@@ -39,13 +39,14 @@ export class Header {
   private buildMobileMenus() {
     if (this.isAuthenticated()) {
       this.mobileItems = [
-        { label: 'Dashboard', icon: 'pi pi-home', command: () => this.go('/dashboard') },
-        { label: 'Profil', icon: 'pi pi-user', command: () => this.go('/profile') },
+        { label: 'Mon Abonnement', icon: 'pi pi-star', command: () => this.go('/mon-abonnement') },
+        { label: 'Mes Factures', icon: 'pi pi-file', command: () => this.go('/mes-factures') },
+        { label: 'Mes Paramètres', icon: 'pi pi-user', command: () => this.go('/mes-parametres') },
         { label: 'Déconnexion', icon: 'pi pi-sign-out', command: () => this.logout() }
       ];
     } else {
       this.mobileItems = [
-        { label: 'Prix', icon: 'pi pi-tag', command: () => this.go('/pricing') },
+        { label: 'Prix', icon: 'pi pi-tag', command: () => this.go('/#pricing') },
         { label: 'Connexion', icon: 'pi pi-sign-in', command: () => this.go('/login') },
         { label: 'Inscription', icon: 'pi pi-user-plus', command: () => this.go('/register') }
       ];

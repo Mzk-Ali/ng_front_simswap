@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
-import { BehaviorSubject, map, Observable } from "rxjs";
+import { BehaviorSubject, catchError, map, Observable, throwError } from "rxjs";
 import { SubscribeRequest, SubscribeResponse, UserSubscriptionResponse } from "../models/subscription.model";
 import { ApiResponse } from "../../../core/models/response.model";
 import { User } from "../../../core/models/user.model";
@@ -35,15 +35,39 @@ export class SubscriptionService {
         );
     }
 
-    cancelSubscription(subscriptionId: number): Observable<UserSubscriptionResponse> {
+    cancelSubscription(subscriptionId: number): Observable<UserSubscriptionResponse | void> {
         return this.http.put<ApiResponse<UserSubscriptionResponse>>(`${this.API_URL}/${subscriptionId}/cancel`, {}).pipe(
             map(response => {
-                if(!response.success || !response.data) {
+                if(!response.success) {
                     console.log(response);
                     throw new Error(response.message);
                 }
                 return response.data;
             }),
+            catchError((error) => this.handleError(error))
         );
+    }
+
+    getActiveSubscription(userId: string): Observable<UserSubscriptionResponse | void> {
+        return this.http.get<ApiResponse<UserSubscriptionResponse>>(`${this.API_URL}/user/${userId}`).pipe(
+            map(response => {
+                if (!response.success) {
+                    throw new Error(response.message);
+                }
+                return response.data;
+            })
+        );
+    }
+
+    handleError(error: any): Observable<never> {
+        let errorMessage = 'Une erreur est survenue';
+        
+        if (error.error?.message) {
+            errorMessage = error.error.message;
+        } else if (error.status === 404) {
+            errorMessage = "Abonnement introuvable";
+        }
+
+        return throwError(() => new Error(errorMessage));
     }
 }

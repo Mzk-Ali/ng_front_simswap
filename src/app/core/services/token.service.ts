@@ -29,6 +29,7 @@ export class TokenService {
         localStorage.removeItem('access_token');
         localStorage.removeItem('refresh_token');
         localStorage.removeItem('token_expires_at');
+        localStorage.removeItem('user_data');
     }
 
     isAuthenticated(): boolean {

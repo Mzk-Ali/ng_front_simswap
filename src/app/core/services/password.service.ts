@@ -4,6 +4,7 @@ import { Router } from "@angular/router";
 import { catchError, map, Observable, throwError } from "rxjs";
 import { ChangePasswordRequest, ForgotPasswordRequest, PasswordResetResponse, ResetPasswordRequest } from "../models/password.model";
 import { ApiResponse } from "../models/response.model";
+import { AuthService } from "./auth.service";
 
 @Injectable({
     providedIn: 'root',
@@ -11,6 +12,7 @@ import { ApiResponse } from "../models/response.model";
 export class PasswordService {
     private readonly http                   = inject(HttpClient);
     private readonly router                 = inject(Router);
+    private readonly authService            = inject(AuthService);
 
     private readonly API_URL                = 'http://localhost:8888/api/v1/auth';
 
@@ -27,10 +29,11 @@ export class PasswordService {
 
         return this.http.post<ApiResponse<void>>(`${this.API_URL}/change-password`, changePasswordRequest).pipe(
             map(response => {
-                if(!response.success || !response.data) {
+                if(!response.success) {
                     throw new Error(response.message);
                 }
-                return response.data;
+                this.authService.logout();
+                return response;
             }),
             catchError((error) => this.handlePasswordError(error))
         );

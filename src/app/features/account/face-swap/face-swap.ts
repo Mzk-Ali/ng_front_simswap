@@ -4,6 +4,7 @@ import { SelectButton } from 'primeng/selectbutton';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { MessageService } from 'primeng/api';
 
   interface FileHandle {
     file: File;
@@ -24,6 +25,7 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 export class FaceSwap {
   private readonly fb             = inject(FormBuilder);
   private readonly sanitizer      = inject(DomSanitizer);
+  private readonly messageService = inject(MessageService);
 
   swap : Swap = {
     originalImage: null,
@@ -90,6 +92,13 @@ export class FaceSwap {
 
     const originalFile: File | null = this.swap.originalImage?.file ?? null;
     const faceFile: File | null = this.swap.faceImage?.file ?? null;
+
+    this.messageService.add({
+        severity: 'success',
+        summary: 'Succès',
+        detail: 'Votre face swap a été effectué avec succès',
+        life: 3000,
+    });
 
     console.log('Original File:', originalFile);
     console.log('Face File:', faceFile);

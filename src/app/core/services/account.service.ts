@@ -23,10 +23,11 @@ export class AccountService {
             body: { password }
         }).pipe(
             map(response => {
-                if(!response.success || !response.data) {
+                if(!response.success) {
                     throw new Error(response.message);
                 }
-                return response.data;
+                this.authService.logout();
+                return response;
             }),
             tap(() => {
                 this.authService.logout();

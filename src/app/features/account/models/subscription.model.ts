@@ -20,6 +20,8 @@ export interface SubscriptionPlanResponse {
 export interface UserSubscriptionResponse {
     id: string;
     userId: string;
+    status: string;
+    plan: SubscriptionPlanResponse;
     currentPeriodStart: string;
     currentPeriodEnd: string;
     cancelAtPeriodEnd: boolean;
