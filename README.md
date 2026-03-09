@@ -23,6 +23,13 @@
 [![Node Version](https://img.shields.io/badge/Node-24-339933?style=for-the-badge&logo=nodedotjs)](https://nodejs.org/)
 [![LinkedIn][linkedin-shield]][linkedin-url]
 
+<br />
+
+| Service | Pipeline CI (Build) | Pipeline CD (Docker) | Image Registre (GHCR) |
+| :--- | :---: | :---: | :---: |
+| **Frontend** | [![CI Frontend](https://github.com/Mzk-Ali/ng_front_simswap/actions/workflows/ci_ng.yml/badge.svg)](https://github.com/Mzk-Ali/ng_front_simswap/actions) | [![CD Frontend](https://github.com/Mzk-Ali/ng_front_simswap/actions/workflows/cd_ng.yml/badge.svg)](https://github.com/Mzk-Ali/ng_front_simswap/actions) | [![Docker](https://img.shields.io/badge/Pull-Frontend-blue?logo=docker&logoColor=white)](https://github.com/Mzk-Ali/ng_front_simswap/pkgs/container/ng_front_simswap) |
+
+
 
 <br />
 
