@@ -1,21 +1,33 @@
 import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { provideRouter, withInMemoryScrolling } from '@angular/router';
 import { providePrimeNG } from 'primeng/config';
-import Aura from '@primeuix/themes/aura';
 
 import { routes } from './app.routes';
+import MyPreset from './mypreset';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { authInterceptor } from './core/interceptors/auth.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
-    provideRouter(routes),
+    provideRouter(
+        routes,
+        withInMemoryScrolling({
+            anchorScrolling: 'enabled',
+            scrollPositionRestoration: 'enabled'
+        })
+    ),
+    provideHttpClient(withInterceptors([authInterceptor])),
+    MessageService,
+    ConfirmationService,
     providePrimeNG({
             theme: {
-                preset: Aura,
+                preset: MyPreset,
                 options: {
                     ripple: true,
                     inputStyle: 'outlined',
-                    darkModeSelector: false
+                    darkModeSelector: false,
                 }
             },
             zIndex: {

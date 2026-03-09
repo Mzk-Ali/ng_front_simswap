@@ -1,0 +1,43 @@
+<div class="card space-y-3 w-full mx-auto">
+    <div class="flex flex-col gap-4 items-center">
+        <h2 class="font-semibold text-center text-primary text-xl">Supprimer votre compte</h2>
+        <p class="italic text-center">
+            Cette action est irréversible. Toutes vos données seront définitivement supprimées.
+        </p>
+    
+        <div>
+            <strong class="text-red-400">Attention :</strong> La suppression de votre compte entraînera :
+            <ul class="ml-20 list-disc list-inside">
+                <li>La suppression de toutes vos données personnelles</li>
+                <li>L'annulation de votre abonnement actif</li>
+                <li>La perte de l'accès à tous vos contenus</li>
+            </ul>
+        </div>
+    </div>
+
+    <form [formGroup]="deleteForm" *ngIf="!showDeleteConfirm()" class="w-full max-w-2xl mx-auto flex flex-col gap-2 p-2">
+        <div>
+            <label for="password" class="block text-lg font-semibold">
+                Mot de passe
+            </label>
+            <p-password formControlName="password"
+                [invalid]="isInvalid('password')"
+                [feedback]="false"
+                [toggleMask]="true"
+                autocomplete="off"
+                fluid
+                class="w-full my-2"
+            />
+
+            @if (isInvalid('password')) {
+                <p-message severity="error" size="small" variant="simple">Mot de passe est requis.</p-message>
+            }
+        </div>
+
+        <div class="card flex justify-center gap-2">
+            <p-toast />
+            <p-confirmdialog />
+            <p-button (click)="confirm2($event)" label="Supprimer mon Compte" severity="danger" [outlined]="true" />
+        </div>
+    </form>
+</div>
